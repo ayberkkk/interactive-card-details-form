@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Inter:wght@100;200;300;400;500;800&family=Montserrat:ital,wght@0,100;0,300;0,400;0,500;1,600&family=Nunito:wght@200;300;500;700;800&family=Patrick+Hand&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Source+Sans+Pro:wght@300;400;600;700&family=Space+Grotesk:wght@500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    font-family: 'Hanken Grotesk', sans-serif;
+}
+
+.front-card {
+    position: absolute;
+    top: 180px;
+    background: url(../img/bg-card-front.png) no-repeat center/cover;
+    width: 320px;
+    height: 225px;
+    border-radius: 15px;
+    z-index: 20;
+}
+
+.back-card {
+    position: absolute;
+    right: 20px;
+    background: url(../img/bg-card-back.png) no-repeat center/cover;
+    width: 320px;
+    height: 225px;
+    border-radius: 15px;
+}
+
+.back-card p {
+    top: 6.15rem;
+}
+
+form,
+.thank-you {
+    margin-top: 350px;
+}
+
+form label {
+    @apply block uppercase tracking-wider text-slate-800 mb-2 text-sm
+}
+
+form input {
+    @apply border-2 border-slate-300 py-3 px-5 rounded outline-none w-full
+}
+
+form .btn {
+    @apply py-3 px-6 rounded shadow text-white text-base tracking-wide lg:text-lg;
+    background-color: #21092f;
+}
+
+
+@media (min-width: 768px) {
+
+    .front-card,
+    .back-card {
+        width: 500px;
+        height: 300px;
+    }
+
+    .back-card p {
+        top: 8.3rem;
+    }
+
+    form,
+    .thank-you  {
+        margin-top: 500px;
+    }
+
+}
+
+@media (min-width:1024px) {
+
+    .front-card {
+        position: relative;
+        top: 8.3rem;
+    }
+
+    .back-card {
+        position: relative;
+        right: 0;
+    }
+
+    form,
+    .thank-you  {
+        margin-top: 0px;
+    }
+}
