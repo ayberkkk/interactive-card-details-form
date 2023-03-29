@@ -1,17 +1,90 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./assets/css/App.css";
 import bgMobile from "./assets/img/bg-main-mobile.png";
 import bgDesktop from "./assets/img/bg-main-desktop.png";
 import cardLogo from "./assets/img/card-logo.svg";
 import confirm from "./assets/img/icon-complete.svg";
-import {format} from "date-fns"
+import { format } from "date-fns";
 
 function App() {
   const [confirmed, setConfirmed] = useState(false);
   const [name, setName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
-  const [date, setDate] = useState("00");
-  const [cvc, setCvc] = useState("0123");
+  const [date, setDate] = useState("");
+  const [cvc, setCvc] = useState("");
+  const [nameInfoVisible, setNameInfoVisible] = useState(false);
+  const [cardNumberInfoVisible, setCardNumberInfoVisible] = useState(false);
+  const [dateInfoVisible, setDateInfoVisible] = useState(false);
+  const [cvcInfoVisible, setCvcInfoVisible] = useState(false);
+  const infos = document.querySelectorAll(".info");
+
+  const handleFocus = (inputName) => {
+    switch (inputName) {
+      case "name":
+        setNameInfoVisible(false);
+        break;
+      case "cardNumber":
+        setCardNumberInfoVisible(false);
+        break;
+      case "date":
+        setDateInfoVisible(false);
+        break;
+      case "cvc":
+        setCvcInfoVisible(false);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleBlur = (inputName) => {
+    switch (inputName) {
+      case "name":
+        setNameInfoVisible(name === "");
+        break;
+      case "cardNumber":
+        setCardNumberInfoVisible(cardNumber === "");
+        break;
+      case "date":
+        setDateInfoVisible(date === "");
+        break;
+      case "cvc":
+        setCvcInfoVisible(cvc === "");
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleContinue = () => {
+    setName("");
+    setCardNumber("");
+    setDate("00");
+    setCvc("0123");
+    setConfirmed(false);
+  };
+
+  function handleCardNumberChange(e) {
+    setCardNumber(
+      e.target.value
+        .replace(/\s/g, "")
+        .replace(/(\d{4})/g, "$1 ")
+        .trim()
+    );
+  }
+
+  const confirmCardDetails = (event) => {
+    event.preventDefault(); // Bu satırı ekleyin
+
+    if (name === "" || cardNumber === "" || date === "" || cvc === "") {
+      setNameInfoVisible(true);
+      setCardNumberInfoVisible(true);
+      setDateInfoVisible(true);
+      setCvcInfoVisible(true);
+    } else {
+      setConfirmed(true);
+    }
+  };
 
   return (
     <>
@@ -35,7 +108,7 @@ function App() {
                     {name}
                   </li>
                   <li className="text-white uppercase text-base lg:text-xl tracking-widest">
-                  {format(new Date(date), "MM/yy")}
+                    {date}
                   </li>
                 </ul>
               </div>
@@ -48,7 +121,13 @@ function App() {
           </div>
           <div className="pt-8 px-5 pb-20">
             {!confirmed && (
-              <form className="flex flex-col justify-center gap-8 max-w-lg lg:h-screen">
+              <form
+                className="flex flex-col justify-center gap-8 max-w-lg lg:h-screen"
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  confirmCardDetails();
+                }}
+              >
                 <div>
                   <label className="card-holder">Cardhloder Name</label>
                   <input
@@ -59,7 +138,15 @@ function App() {
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    onFocus={() => handleFocus("name")}
+                    onBlur={() => handleBlur("name")}
                   />
+                  <p
+                    className={`info ${nameInfoVisible ? "" : "info--visible"}`}
+                    aria-live="polite"
+                  >
+                    Can't be blank
+                  </p>
                 </div>
                 <div>
                   <label className="card-number">Card Number</label>
@@ -70,12 +157,19 @@ function App() {
                     placeholder="e.g 0000 0000 0000 0000"
                     maxLength={19}
                     required
-                    value={cardNumber
-                      .replace(/\s/g, "")
-                      .replace(/(\d{4})/g, "$1 ")
-                      .trim()}
-                    onChange={(e) => setCardNumber(e.target.value)}
+                    value={cardNumber}
+                    onChange={handleCardNumberChange}
+                    onFocus={() => handleFocus("cardNumber")}
+                    onBlur={() => handleBlur("cardNumber")}
                   />
+                  <p
+                    className={`info ${
+                      cardNumberInfoVisible ? "" : "info--visible"
+                    }`}
+                    aria-live="polite"
+                  >
+                    Can't be blank
+                  </p>
                 </div>
 
                 <article className="flex items-center justify-between gap-8">
@@ -89,7 +183,17 @@ function App() {
                       required
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
+                      onFocus={() => handleFocus("date")}
+                      onBlur={() => handleBlur("date")}
                     />
+                    <p
+                      className={`info ${
+                        dateInfoVisible ? "" : "info--visible"
+                      }`}
+                      aria-live="polite"
+                    >
+                      Can't be blank
+                    </p>
                   </div>
 
                   <div className="flex-1">
@@ -102,19 +206,42 @@ function App() {
                       required
                       value={cvc}
                       onChange={(e) => setCvc(e.target.value)}
+                      onFocus={() => handleFocus("cvc")}
+                      onBlur={() => handleBlur("cvc")}
                     />
+                    <p
+                      className={`info ${
+                        cvcInfoVisible ? "" : "info--visible"
+                      }`}
+                      aria-live="polite"
+                    >
+                      Can't be blank
+                    </p>
                   </div>
                 </article>
                 <button
                   type="submit"
-                  onClick={() => setConfirmed(true)}
+                  onClick={() => {
+                    if (
+                      name === "" ||
+                      cardNumber === "" ||
+                      date === "" ||
+                      cvc === ""
+                    ) {
+                      document.querySelectorAll(".info").forEach((el) => {
+                        el.classList.add("info--visible");
+                      });
+                    } else {
+                      setConfirmed(true);
+                    }
+                  }}
                   className="btn"
                 >
                   Confirm
                 </button>
               </form>
             )}
-            {confirmed && <ThankYou setConfirmed={setConfirmed()} />}
+            {confirmed && <ThankYou handleContinue={handleContinue} />}
           </div>
         </div>
       </section>
@@ -122,6 +249,11 @@ function App() {
   );
 }
 function ThankYou(props) {
+  useEffect(() => {
+    if (props.confirmed) {
+      props.setConfirmed(false);
+    }
+  }, [props.confirmed, props.setConfirmed]);
   return (
     <>
       <div className="thank-you flex flex-col items-center justify-center lg:h-screen text-center max-w-lg mx-auto">
@@ -132,7 +264,7 @@ function ThankYou(props) {
         <p className="text-slate-400">We've added your card details</p>
         <button
           className="btn block mx-auto mt-10"
-          onClick={() => props.setConfirmed(false)}
+          onClick={props.handleContinue}
         >
           Continue
         </button>

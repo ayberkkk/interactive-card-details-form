@@ -44,13 +44,31 @@ form input {
     @apply border-2 border-slate-300 py-3 px-5 rounded outline-none w-full
 }
 
-form .btn {
+.btn {
     @apply py-3 px-6 rounded shadow text-white text-base tracking-wide lg:text-lg;
     background-color: #21092f;
 }
 
+.info {
+    transition: height .3s ease-in-out;
+    font-size: 13px;
+    overflow: hidden;
+    height: 20px;
+    color: #ff5252;
+    transform: translateY(0px);
+    margin: 0;
+}
+
+.info--visible {
+    height: 0px;
+    margin: 0;
+    padding: 0;
+}
 
 @media (min-width: 768px) {
+    * {
+        overflow-y: hidden;
+    }
 
     .front-card,
     .back-card {
