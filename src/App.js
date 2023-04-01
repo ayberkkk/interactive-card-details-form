@@ -4,7 +4,6 @@ import bgMobile from "./assets/img/bg-main-mobile.png";
 import bgDesktop from "./assets/img/bg-main-desktop.png";
 import cardLogo from "./assets/img/card-logo.svg";
 import confirm from "./assets/img/icon-complete.svg";
-import { format } from "date-fns";
 
 function App() {
   const [confirmed, setConfirmed] = useState(false);
@@ -16,7 +15,6 @@ function App() {
   const [cardNumberInfoVisible, setCardNumberInfoVisible] = useState(false);
   const [dateInfoVisible, setDateInfoVisible] = useState(false);
   const [cvcInfoVisible, setCvcInfoVisible] = useState(false);
-  const infos = document.querySelectorAll(".info");
 
   const handleFocus = (inputName) => {
     switch (inputName) {
